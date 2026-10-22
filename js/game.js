@@ -21,7 +21,7 @@
   const KEY = 'tileLinkTT.v1';
   const ZCH = 1.4; // the boys stand this far in front of the board
   const TILT = 0.16; // and lean back a little, so we see them a bit from above
-  const MIN_PX = { easy: 50, normal: 40 }; // the smallest a tile may get (pixels across): a small screen gets fewer tiles
+  const MIN_PX = { easy: 40, normal: 34 }; // the smallest a tile may get (pixels across): a small screen gets fewer tiles
   const CPUS = {
     easy: { id: 'froggy', emoji: '🐸', name: 'FROGGY', color: '#3fb950', think: [5.5, 8], slip: 0.25, smart: 0.5 },
     normal: { id: 'foxy', emoji: '🦊', name: 'FOXY', color: '#ff6b2c', think: [3, 4.6], slip: 0.15, smart: 0.75 },
@@ -95,8 +95,8 @@
       // the title: the little board, the player beside it
       const sideW = Math.max(70, Math.min(220, area.w * 0.27));
       out.boards.push({ x: area.x + sideW, y: area.y, w: area.w - sideW, h: area.h });
-      const h = Math.min(area.h * 0.55, sideW * 1.6);
-      out.L = { x: area.x + sideW * 0.5, feet: area.y + area.h * 0.86, h };
+      const h = Math.min(area.h * 0.5, sideW * 1.45);
+      out.L = { x: area.x + sideW * 0.58, feet: area.y + area.h * 0.86, h };
       out.B = { x: area.x + sideW * 0.85, feet: out.L.feet, h: h * 0.85 };
       return out;
     }
@@ -106,10 +106,10 @@
         const sideW = Math.max(84, Math.min(240, area.w * 0.18));
         const rightW = Math.min(150, callH + 24);
         out.boards.push({ x: area.x + sideW, y: area.y, w: area.w - sideW - rightW, h: area.h });
-        const h = Math.min(area.h * 0.5, sideW * 1.5);
+        const h = Math.min(area.h * 0.42, sideW * 1.3);
         const feet = area.y + area.h * 0.94;
-        out.L = { x: area.x + sideW * 0.32, feet, h };
-        out.B = { x: area.x + sideW * 0.78, feet: feet + h * 0.04, h: h * 0.95 };
+        out.L = { x: area.x + sideW * 0.4, feet, h };
+        out.B = { x: area.x + sideW * 0.86, feet: feet + h * 0.04, h: h * 0.95 };
       } else {
         // the boys in a strip along the bottom
         const strip = Math.max(100, Math.min(200, area.h * 0.2));
@@ -309,6 +309,7 @@
       };
       after(Math.max(0.3, dealT - 1.6), tick);
     }
+    placeTags(); // now the boards have their size
     TL.fx.overlay.clear();
     flyers.clear();
     updateHud(true);
@@ -759,7 +760,7 @@
   // ---------------------------------------------------------------- the story card
 
   const STORY = [
-    { art: '🀄 〰️ 🀄', text: 'In China this game is called Lianliankan: "link, link, look!" Find two tiles that match and join them with a line. The line may turn two times at most.' },
+    { art: '🀄🔗🀄', text: 'In China this game is called Lianliankan: "link, link, look!" Find two tiles that match and join them with a line. The line may turn two times at most.' },
     { art: '👵👴🀄👩👨', text: 'The tiles look like mahjong tiles. At holidays, families in China often play mahjong together round one table while the kids watch and cheer. Click, clack!' },
     { art: '🐭🐮🐯🐰🐲🐍', text: 'Every year in China has an animal. Twelve take turns: rat, ox, tiger, rabbit, dragon, snake, horse, goat, monkey, rooster, dog and pig. 2026 is the Year of the Horse 🐴!' },
     { art: '🏮🧧🥮', text: 'Red lanterns glow at the Lantern Festival. Red envelopes bring lucky money at Spring Festival. Round mooncakes are for the round full moon at the Mid-Autumn Festival.' },
