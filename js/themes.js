@@ -18,7 +18,7 @@
       tiles: [['🏮', 'LANTERN', '灯笼'], ['🧧', 'RED ENVELOPE', '红包'], ['🥟', 'DUMPLINGS', '饺子'], ['🐼', 'PANDA', '熊猫'], ['🥢', 'CHOPSTICKS', '筷子'],
         ['🍵', 'TEA', '茶'], ['🧨', 'FIRECRACKER', '鞭炮'], ['🀄', 'MAHJONG', '麻将'], ['🍜', 'NOODLES', '面条'], ['🥮', 'MOONCAKE', '月饼'],
         ['🪁', 'KITE', '风筝'], ['🧋', 'BUBBLE TEA', '奶茶'], ['🍚', 'RICE', '米饭'], ['🎆', 'FIREWORKS', '烟花'], ['🍊', 'MANDARIN', '橘子'],
-        ['🪭', 'FAN', '扇子'], ['🫖', 'TEAPOT', '茶壶'], ['🐟', 'FISH', '鱼'], ['🌕', 'FULL MOON', '月亮'], ['🐉', 'DRAGON', '龙']],
+        ['🍑', 'PEACH', '桃子'], ['🫖', 'TEAPOT', '茶壶'], ['🐟', 'FISH', '鱼'], ['🌕', 'FULL MOON', '月亮'], ['🐉', 'DRAGON', '龙']],
     },
     fruit: {
       icon: '🍓', name: 'FRUIT', accent: '#3fa34d',

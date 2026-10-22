@@ -5,8 +5,8 @@
    2. versus: the rule against a second, separate search (a breadth-first search over cells and directions that
       counts turns) on random boards: the same answer for every pair of the same kind, and every path the game
       returns is real (straight lines, only empty cells in between, at most two turns, the fewest turns).
-   3. boards: every generated board (each level of both levels, wide and tall, a few deals each) can be cleared: its
-      clearing is replayed link by link with the second search.
+   3. boards: every generated board (each level of both levels, wide and tall, a few deals each) holds the tiles the
+      level asked for and can be cleared: its clearing is replayed link by link with the second search.
    4. reshuffle: a board that can't be cleared (and a dead end with no link at all) is reshuffled into one that can,
       with the same tiles on the same cells; the shuffle button's mix and the sure builder can be cleared too.
    5. games: bots link random pairs (which can walk into dead ends) through whole games: every game ends with an
@@ -181,8 +181,11 @@
             const filled = g.board.cells.reduce((n, k, i) => n + (k >= 0 ? 1 : 0), 0);
             const odd = Object.values(tally(g.board)).some((c) => c % 2);
             let why = '';
+            const want = R().make(spec.rows, spec.cols);
+            R().kindsFor(cells.length, Math.min(spec.kinds, cells.length / 2)).forEach((k, n) => (want.cells[cells[n]] = k));
             if (filled !== cells.length || cells.some((i) => g.board.cells[i] < 0)) why = 'the tiles aren\'t on the level\'s cells';
             else if (odd) why = 'a picture without a partner';
+            else if (!sameTiles(g.board, want)) why = 'not the tiles the level asked for';
             else why = replay(g.board, R().solve(g.board));
             if (why) out.fail.push(`boards: ${diff} level ${lv}${tall ? ' (tall)' : ''} deal ${d + 1}: ${why}`);
             if (why && firstFail) return;
