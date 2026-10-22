@@ -130,8 +130,8 @@
       g.fillStyle = '#c8241c';
       g.fillText(label, 128, 62);
     }
-    g.font = `${zh ? 148 : 172}px ${EMOJI_FONT}`;
-    g.fillText(tile[0], 128, zh ? 198 : 172);
+    g.font = `${zh ? 168 : 200}px ${EMOJI_FONT}`;
+    g.fillText(tile[0], 128, zh ? 206 : 176);
     const tex = toTexture(c);
     tex.anisotropy = 4;
     faceCache.set(key, tex);
@@ -221,7 +221,7 @@
 
     const v = {
       group, b: null, theme: 'zodiac', tiles: new Map(), rows: 0, cols: 0, W: 0, H: 0, s: 1, px: 40, rect: null,
-      sel: -1, cursorAt: -1, hoverAt: -1, hint: null, hintT: 0, linkT: 0, color: '#ffd400', t: 0,
+      sel: -1, cursorAt: -1, hoverAt: -1, hintPair: null, hintT: 0, linkT: 0, color: '#ffd400', t: 0,
     };
     views.push(v);
 
@@ -296,7 +296,7 @@
       v.W = b.W;
       v.H = b.H;
       v.sel = -1;
-      v.hint = null;
+      v.hintPair = null;
       paths.link.root.visible = paths.hint.root.visible = false;
       const tw = v.W * PX + 0.3, th = v.H * PY + 0.3;
       tray.geometry.dispose();
@@ -412,7 +412,7 @@
         }
       }
       if (v.sel === a || v.sel === z) v.sel = -1;
-      if (v.hint && (v.hint[0] === a || v.hint[0] === z || v.hint[1] === a || v.hint[1] === z || !v.tiles.has(v.hint[0]))) clearHint();
+      if (v.hintPair && (v.hintPair[0] === a || v.hintPair[0] === z || v.hintPair[1] === a || v.hintPair[1] === z)) clearHint();
     }
 
     function shake(list) {
@@ -438,15 +438,15 @@
 
     // Your brother's pair: both tiles glow and the path between them shows, until it's linked (or cleared).
     function hint(pair, pts) {
-      v.hint = pair;
+      v.hintPair = pair;
       v.hintT = 0;
       for (const t of v.tiles.values()) t.hint = 0;
       for (const i of pair) if (v.tiles.has(i)) v.tiles.get(i).hint = 1;
       drawPath(paths.hint, pts, FRONT + BD + 0.5);
     }
     function clearHint() {
-      if (v.hint) for (const i of v.hint) if (v.tiles.has(i)) v.tiles.get(i).hint = 0;
-      v.hint = null;
+      if (v.hintPair) for (const i of v.hintPair) if (v.tiles.has(i)) v.tiles.get(i).hint = 0;
+      v.hintPair = null;
       paths.hint.root.visible = false;
     }
 
@@ -560,10 +560,17 @@
       if (cur.visible) cur.material.opacity = 0.75 + 0.25 * Math.sin(v.t * 6);
     }
 
-    // everything still moving (the deal, pops, spins)?
+    // still dealing or shuffling? (tiles popping off don't count: you can pick the next pair straight away)
     function busy() {
-      for (const t of v.tiles.values()) if (t.drop >= 0 || t.pop >= 0 || t.spin >= 0) return true;
+      for (const t of v.tiles.values()) if (t.drop >= 0 || t.spin >= 0) return true;
       return false;
+    }
+    // where the tray is on the screen, in pixels
+    function screenRect() {
+      group.updateMatrixWorld(true);
+      const hw = (v.W * PX) / 2 + 0.3, hh = (v.H * PY) / 2 + 0.3;
+      const a = toScreen(group.localToWorld(new T.Vector3(-hw, hh, 0))), b = toScreen(group.localToWorld(new T.Vector3(hw, -hh, 0)));
+      return { x0: Math.round(a.x), y0: Math.round(a.y), x1: Math.round(b.x), y1: Math.round(b.y) };
     }
 
     function clear() {
@@ -575,7 +582,7 @@
       cur.visible = false;
     }
 
-    Object.assign(v, { setBoard, fit, cellAt, onTray, worldOf, screenOf, select, link, shake, shuffle, hint, clearHint, cursor, hover, retexture, update, busy, clear });
+    Object.assign(v, { setBoard, fit, cellAt, onTray, worldOf, screenOf, screenRect, select, link, shake, shuffle, hint, clearHint, cursor, hover, retexture, update, busy, clear });
     Object.defineProperty(v, 'visible', { get: () => group.visible, set: (on) => (group.visible = on) });
     return v;
   }
